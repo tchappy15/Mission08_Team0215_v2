@@ -2,7 +2,58 @@
     ViewData["Title"] = "Home Page";
 }
 
+@model List<Quadrant>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Stephen Covey's Quadrant Tasks</h1>
 </div>
+
+@{
+    // Define the four known quadrants (ensures all appear even if no tasks exist for one)
+    var quadrantNumbers = new List<string> { "1", "2", "3", "4" };
+    var groupedQuadrants = Model.GroupBy(q => q.QuadrantNum).ToDictionary(g => g.Key, g => g.ToList());
+}
+
+@foreach (var quadrantNum in quadrantNumbers)
+{
+    <div class="col-6">
+        <h1>Quadrant @quadrantNum</h1>
+        <table class="table table-bordered">
+            <thead class="fw-bold">
+                <tr>
+                    <td>Task</td>
+                    <td>Due Date</td>
+                    <td>Category</td>
+                    <td>Completed</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (groupedQuadrants.ContainsKey(quadrantNum) && groupedQuadrants[quadrantNum].Any())
+                {
+                    @foreach (var task in groupedQuadrants[quadrantNum])
+                    {
+                        <tr>
+                            <td>@task.TaskName</td>
+                            <td>@task.DueDate</td> <!-- Keep as string or format if needed -->
+                            <td>@task.Category?.CategoryName</td>
+                            <td>@(task.Completed ? "Yes" : "No")</td>
+                            <td>
+                                <a class="btn btn-info" asp-controller="Home" asp-action="Edit" asp-route-id="@task.TaskId">Edit</a>
+                                <a class="btn btn-danger" asp-controller="Home" asp-action="Delete" asp-route-id="@task.TaskId">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <!-- If there are no tasks for this quadrant, show a placeholder row -->
+                    <tr>
+                        <td colspan="5" class="text-center">No tasks in this quadrant</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

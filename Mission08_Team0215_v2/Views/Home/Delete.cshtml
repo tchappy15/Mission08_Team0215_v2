@@ -1,0 +1,11 @@
+﻿@model Quadrant
+
+<h2>Confirm Deletion</h2>
+<h3>@Model.TaskName</h3>
+
+<form asp-action="Delete" asp-controller="Home" method="post">
+    <input type="hidden" asp-for="TaskId" />
+
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a class="btn btn-info" asp-controller="Home" asp-action="Index">Cancel</a>
+</form>

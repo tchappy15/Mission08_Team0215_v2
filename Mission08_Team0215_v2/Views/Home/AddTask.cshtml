@@ -1,0 +1,46 @@
+﻿@model Quadrant
+
+<h1> Add a New Task: </h1>
+
+<form method="post">
+
+    <input type="hidden" asp-for="TaskId" />
+
+    <label asp-for="TaskName">Task: </label>
+    <input asp-for="TaskName" />
+    <br /><br />
+
+    <label asp-for="DueDate">Due Date (mm-DD-yy): </label>
+    <input asp-for="DueDate" />
+    <br /><br />
+
+    <label asp-for="QuadrantNum">Quadrant: </label>
+    <select asp-for="QuadrantNum">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+
+    </select>
+    <br /><br />
+
+    <select asp-for="CategoryId">
+        <option value="">Select a Category</option>
+        @foreach (Category c in ViewBag.Categories)
+        {
+            <option value="@c.CategoryId">@c.CategoryName</option>
+        }
+    </select>
+    <br /><br />
+
+    <label asp-for="Completed">Did you complete it? </label>
+    <select asp-for="Completed">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+    </select>
+    <br /><br />
+
+    <button type="submit"> Submit Task </button>
+
+    <div asp-validation-summary="All"> </div>
+</form>
